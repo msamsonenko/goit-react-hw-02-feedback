@@ -1,43 +1,42 @@
 import PropTypes from 'prop-types';
+import shortid from 'shortid';
 import './Statistics.css';
 
-const Statistics = ({ good, neutral, bad, total, positivePercentage }) => {
+const Statistics = ({ feedbacks, total, positivePercentage }) => {
+  const feedbackTags = Object.keys(feedbacks);
   return (
     <div>
       <table>
-        <tr>
-          <th>Feedback</th>
-          <th>Votes</th>
-        </tr>
-        <tr>
-          <td>Good</td>
-          <td>{good}</td>
-        </tr>
-        <tr>
-          <td>Neutral</td>
-          <td>{neutral}</td>
-        </tr>
-        <tr>
-          <td>Bad</td>
-          <td>{bad}</td>
-        </tr>
-        <tr>
-          <td>Total</td>
-          <td>{total()}</td>
-        </tr>
-        <tr>
-          <td>Positive feedbacks</td>
-          <td>{positivePercentage()}%</td>
-        </tr>
+        <tbody>
+          <tr key={shortid.generate()}>
+            <th>Feedback</th>
+            <th>Votes</th>
+          </tr>
+          {feedbackTags.map(tag => {
+            const itemKey = shortid.generate();
+            return (
+              <tr key={itemKey}>
+                <td>{tag}</td>
+                <td>{feedbacks[tag]}</td>
+              </tr>
+            );
+          })}
+          <tr key={shortid.generate()}>
+            <td>Total</td>
+            <td>{total()}</td>
+          </tr>
+          <tr key={shortid.generate()}>
+            <td>Positive feedbacks</td>
+            <td>{positivePercentage()}%</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   );
 };
 
 Statistics.propTypes = {
-  good: PropTypes.number,
-  neutral: PropTypes.number,
-  bad: PropTypes.number,
+  feedbacks: PropTypes.object,
   total: PropTypes.func,
   positivePercentage: PropTypes.func,
 };
